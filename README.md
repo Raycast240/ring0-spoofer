@@ -2,15 +2,68 @@
 
 Kernel-mode hardware spoofer. Runs entirely in ring 0 via a mapped driver — no user-mode hooks, no filter drivers, no persistent services. Maps once, spoofs everything, exits clean.
 
+## Architecture
+
+```mermaid
+flowchart TD
+    A["spoofer.exe<br/>ImGui + DX11 GUI"]
+    B["mapper<br/>Vulnerable Driver + Physical Memory R/W"]
+    C["Preflight<br/>PDB Symbols · Paging · SSDT · Kernel Range"]
+    D["driver<br/>Mapped Kernel Image"]
+
+    A --> B
+    B --> C
+    C --> D
+
+    D --> E["Firmware & Platform<br/>SMBIOS · EFI · ACPI"]
+    D --> F["Storage & Volumes<br/>Disk Serials · USB · Volume GUIDs"]
+    D --> G["Network & Peripherals<br/>NIC · Wi-Fi · Bluetooth · EDID"]
+    D --> H["Windows Identity<br/>MachineGuid · UUID · Hostname · ProductId"]
+    D --> I["System & Traces<br/>WMI · ETW · PnP · BCD · Prefetch · Logs"]
+
+    E --> J["24 Stages"]
+    F --> J
+    G --> J
+    H --> J
+    I --> J
+
+    J --> K["Return Status"]
+    K --> L["Mapper Teardown"]
+```
+
 ## What it actually touches
 
-SMBIOS tables (Type 0, 1, 2, 3, 4, 11, 17, 41) rewritten in memory. EFI variables — SecureBoot, SetupMode, PK/KEK/db/dbx — patched at runtime. Boot identifiers in BCD and bootmgr. Disk serials in two places: the cached registry copy under `HARDWARE\DEVICEMAP\Scsi` and the live storage stack via a `\Driver\Disk` IRP hook so WMI queries match what the registry says. NIC MAC addresses on Ethernet and Wi-Fi adapters. UUID cache, ARP neighbor table, monitor EDID (including `EDID_OVERRIDE` subkeys, checksum recalculated), USB storage serials, volume GUIDs in `MountedDevices`, Windows ProductId (slight digit drift, activation blobs left alone), trace IDs across ETW/WMI/DiagTrack, MachineGuid, HardwareConfig\LastConfig with subkey carry, Cryptography keys, USN journal deleted and recreated, file timestamps on prefetch/recent/shellbags, artifacts cleanup (Prefetch, Event Logs, ETW) with credential preservation, Bluetooth radio addresses, TPM EK certs and owner auth, WMI CIMOM repository cache, hostname (NetBIOS + DNS), ACPI tables in memory (DSDT/SSDT), GPU identity in PCI config space and driver registry, PnP enum tree device instance paths, WiFi driver MAC via vendor NDIS OIDs.
+- **SMBIOS:** Types 0, 1, 2, 3, 4, 11, 17, 41 rewritten in memory.
+- **EFI variables:** SecureBoot, SetupMode, PK/KEK/db/dbx patched at runtime.
+- **Boot identifiers:** BCD and bootmgr.
+- **Disk serials:** Cached registry copy under `HARDWARE\DEVICEMAP\Scsi` and live storage stack via a `\Driver\Disk` IRP hook.
+- **Network:** Ethernet and Wi-Fi MAC addresses.
+- **UUID cache** and **ARP neighbor table**.
+- **Monitor EDID:** Including `EDID_OVERRIDE` subkeys, checksum recalculated.
+- **USB storage serials** and **volume GUIDs** in `MountedDevices`.
+- **Windows ProductId:** Slight digit drift; activation blobs left alone.
+- **Trace IDs:** ETW/WMI/DiagTrack.
+- **MachineGuid** and **HardwareConfig\LastConfig** with subkey carry.
+- **Cryptography keys**.
+- **USN journal:** Deleted and recreated.
+- **File timestamps:** Prefetch/recent/shellbags.
+- **Artifact cleanup:** Prefetch, Event Logs, ETW with credential preservation.
+- **Bluetooth radio addresses**.
+- **TPM:** EK certificates and owner auth.
+- **WMI CIMOM repository cache**.
+- **Hostname:** NetBIOS + DNS.
+- **ACPI tables:** DSDT/SSDT in memory.
+- **GPU identity:** PCI config space and driver registry.
+- **PnP enum tree:** Device instance paths.
+- **Wi-Fi driver MAC:** Vendor NDIS OIDs.
 
 Twenty-four stages total. Each one idempotent — same salt + boot nonce means same output. Run it twice in the same boot and nothing changes. Fresh boot, fresh mapper load, fresh nonce, new identity.
 
 ## How it works
 
-The user-mode GUI (ImGui + DX11) launches a mapper that installs a vulnerable driver service (randomized name, `SeLoadDriverPrivilege`), opens its device, and uses its physical memory read/write primitives to allocate a large-page cave inside ntoskrnl.exe's address range. The spoof driver image gets relocated, imports resolved against kernel exports, sections copied, then written page-by-page to that cave. Entry point invoked through a hijacked `NtWriteVirtualMemory` SSDT slot — verified before and after, restored on exit. No shellcode, no persistent kernel component. The mapped driver runs, hits all stages, returns status, mapper tears down everything.
+The user-mode GUI (ImGui + DX11) launches a mapper that installs a vulnerable driver service (randomized name, `SeLoadDriverPrivilege`), opens its device, and uses its physical memory read/write primitives to allocate a large-page cave inside ntoskrnl.exe's address range.
+
+The spoof driver image gets relocated, imports resolved against kernel exports, sections copied, then written page-by-page to that cave. Entry point invoked through a hijacked `NtWriteVirtualMemory` SSDT slot — verified before and after, restored on exit. No shellcode, no persistent kernel component. The mapped driver runs, hits all stages, returns status, mapper tears down everything.
 
 Preflight runs first: validates PDB symbols, paging setup, SSDT slot integrity, ntoskrnl range. Aborts clean if anything's off.
 
