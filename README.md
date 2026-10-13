@@ -1,6 +1,8 @@
 # spoofer
 
-Kernel-mode hardware spoofer. Runs entirely in ring 0 via a mapped driver — no user-mode hooks, no filter drivers, no persistent services. Maps once, spoofs everything, exits clean.
+Kernel temp spoofer Runs entirely in ring 0 via a mapped driver no user-mode hooks, no filter drivers, no persistent services.
+
+Tbh its easy to update this to work on Windows 11.
 
 ## Architecture
 
@@ -61,7 +63,7 @@ Twenty-four stages total. Each one idempotent — same salt + boot nonce means s
 
 ## How it works
 
-The user-mode GUI (ImGui + DX11) launches a mapper that installs a vulnerable driver service (randomized name, `SeLoadDriverPrivilege`), opens its device, and uses its physical memory read/write primitives to allocate a large-page cave inside ntoskrnl.exe's address range.
+The gui launches a mapper that installs a vulnerable driver service (randomized name, `SeLoadDriverPrivilege`), opens its device, and uses its physical memory read/write primitives to allocate a large-page cave inside ntoskrnl.exe's address range.
 
 The spoof driver image gets relocated, imports resolved against kernel exports, sections copied, then written page-by-page to that cave. Entry point invoked through a hijacked `NtWriteVirtualMemory` SSDT slot — verified before and after, restored on exit. No shellcode, no persistent kernel component. The mapped driver runs, hits all stages, returns status, mapper tears down everything.
 
@@ -78,21 +80,3 @@ Preflight runs first: validates PDB symbols, paging setup, SSDT slot integrity, 
 ## Building
 
 Open `spoofer.sln` in VS2022. Three projects in the solution: `spoofer` (GUI), `mapper` (kernel loader), `driver` (the mapped image). x64 Release. Dependencies in `third_party/` — imgui, oxorany, ia32.
-
-## Running
-
-Run `spoofer.exe` as Administrator. Two buttons:
-
-**SPOOF HARDWARE** — full run, all stages. Checkboxes let you disable network spoof (NIC/WiFi MAC) and artifact cleanup (Prefetch/Logs/ETW) independently.
-
-**CLEAN TRACES ONLY** — just the artifact cleanup stage, standalone.
-
-Logs to `spoofer.log` in the working directory. GUI shows a live log with color-coded output.
-
-## Repository name
-
-`spoofer`
-
-## Description
-
-Kernel-mode hardware spoofer — SMBIOS, disk, NIC, EDID, GPU, TPM, ACPI, EFI, boot IDs, USB, volumes, ProductId, traces, Bluetooth, hostname, WMI, ARP, UUID cache, enum tree, WiFi driver MAC. Mapped via SSDT hijack, runs once per boot, idempotent transforms.
