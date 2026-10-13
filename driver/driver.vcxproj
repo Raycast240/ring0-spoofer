@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7A11C0DE-590F-4E21-9D6C-590F00000001}</ProjectGuid>
+    <TemplateGuid>{1bc93793-694f-48fe-9372-81e2b05556fd}</TemplateGuid>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+    <Configuration>Release</Configuration>
+    <Platform Condition="'$(Platform)' == ''">x64</Platform>
+    <RootNamespace>NexusSpooferDrv</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <ProjectName>NexusSpooferDrv</ProjectName>
+    <TargetName>NexusSpooferDrv</TargetName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <TargetExt>.sys</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <TargetExt>.sys</TargetExt>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
+    <TargetExt>.sys</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
+    <TargetExt>.sys</TargetExt>
+    <OutDir>$(MSBuildProjectDirectory)\..\build\</OutDir>
+    <IntDir>$(MSBuildProjectDirectory)\..\build\intermediate\driver\</IntDir>
+    <WindowsSdkDir>C:\Program Files (x86)\Windows Kits\10\</WindowsSdkDir>
+    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
+    <IncludePath>.\;C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\km;C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\km\crt;C:\Program Files (x86)\Windows Kits\10\Include\10.0.22621.0\shared;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files (x86)\Windows Kits\10\Lib\10.0.22621.0\km\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Link>
+      <SubSystem>Native</SubSystem>
+      <EntryPointSymbol>entry_point</EntryPointSymbol>
+      <AdditionalDependencies>ntoskrnl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/FIXED:NO /NODEFAULTLIB %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard_C>stdclatest</LanguageStandard_C>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <SpectreMitigation>false</SpectreMitigation>
+      <PreprocessorDefinitions>_AMD64_;AMD64;_WIN64;_KERNEL_MODE=1;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <ControlFlowGuard>false</ControlFlowGuard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Native</SubSystem>
+      <EntryPointSymbol>entry_point</EntryPointSymbol>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateManifest>false</GenerateManifest>
+      <EmbedManifest>false</EmbedManifest>
+      <AdditionalDependencies>ntoskrnl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/FIXED:NO /NODEFAULTLIB %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="dependencies\oxorany\oxorany.cxx" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- spoof modules are #included by main.cpp (single-TU header-only infra
+         cannot be linked from multiple objects); deliberately NOT compiled -->
+    <None Include="smbios_spoofer.cpp" />
+    <None Include="mac_spoofer.cpp" />
+    <None Include="disk_spoofer.cpp" />
+    <None Include="edid_spoofer.cpp" />
+    <None Include="acpi_spoofer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="dependencies\oxorany\include.h" />
+    <ClInclude Include="dependencies\oxorany\oxorany.h" />
+    <ClInclude Include="impl\ia32\ia32.h" />
+    <ClInclude Include="impl\includes.h" />
+    <ClInclude Include="impl\std\std.h" />
+    <ClInclude Include="shared.h" />
+    <ClInclude Include="workspace\client\control.h" />
+    <ClInclude Include="workspace\client\client.hxx" />
+    <ClInclude Include="workspace\kernel\core\hide\hide.hxx" />
+    <ClInclude Include="workspace\kernel\core\process\process.hxx" />
+    <ClInclude Include="workspace\kernel\core\mmu\mmu.hxx" />
+    <ClInclude Include="workspace\kernel\ntoskrnl\exports\exports.hxx" />
+    <ClInclude Include="workspace\kernel\ntoskrnl\ntoskrnl.hxx" />
+    <ClInclude Include="workspace\kernel\ntoskrnl\symbols.h" />
+    <ClInclude Include="workspace\kernel\paging\dpm\dpm.hxx" />
+    <ClInclude Include="workspace\kernel\paging\pagetables.h" />
+    <ClInclude Include="workspace\kernel\paging\paging.hxx" />
+    <ClInclude Include="workspace\kernel\paging\pfn_cr3\pfn_cr3.hxx" />
+    <ClInclude Include="workspace\kernel\core\physical\physical.hxx" />
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="workspace\kernel\ntoskrnl\ntoskrnl.asm" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+  </ImportGroup>
+</Project>

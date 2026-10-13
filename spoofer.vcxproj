@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{d2c2df48-ed01-4c8e-96a3-8a501fb96d75}</ProjectGuid>
+    <RootNamespace>spoofer</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Spoofer</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(MSBuildProjectDirectory)\build\</OutDir>
+    <IntDir>$(MSBuildProjectDirectory)\build\intermediate\spoofer\</IntDir>
+    <TargetName>spoofer</TargetName>
+    <IncludePath>$(DXSDK_DIR)Include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include;.\;.\third_party\imgui;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXSDK_DIR)Lib\x64;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x64;$(VSInstallDir)DIA SDK\lib\amd64;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>$(VSInstallDir)DIA SDK\include;$(ExternalIncludePath)</ExternalIncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard_C>stdclatest</LanguageStandard_C>
+      <DebugInformationFormat>None</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(VSInstallDir)DIA SDK\lib\amd64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>diaguids.lib;d3d11.lib;d3dx11.lib;dxgi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cxx" />
+    <ClCompile Include="src\menu.cpp" />
+    <ClCompile Include="third_party\imgui\imgui.cpp" />
+    <ClCompile Include="third_party\imgui\imgui_draw.cpp" />
+    <ClCompile Include="third_party\imgui\imgui_tables.cpp" />
+    <ClCompile Include="third_party\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="third_party\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="third_party\imgui\imgui_impl_dx11.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="third_party\ia32\include.h" />
+    <ClInclude Include="src\symbols\includes.h" />
+    <ClInclude Include="src\symbols\pdb\pdb.hxx" />
+    <ClInclude Include="src\symbols\pdb_offsets.hxx" />
+    <ClInclude Include="src\core\service\driver\driver.hxx" />
+    <ClInclude Include="src\core\memory\syscall\syscall.hxx" />
+    <ClInclude Include="src\core\memory\paging\paging.hxx" />
+    <ClInclude Include="src\core\service\bytes.h" />
+    <ClInclude Include="src\core\service\service.hxx" />
+    <ClInclude Include="src\core\service\startup.hxx" />
+    <ClInclude Include="src\core\spoof\acpi.hxx" />
+    <ClInclude Include="src\core\spoof\bluetooth.hxx" />
+    <ClInclude Include="src\core\spoof\disk\disk.hxx" />
+    <ClInclude Include="src\core\spoof\disk\disk_class.hxx" />
+    <ClInclude Include="src\core\spoof\disk\disk_offsets.hxx" />
+    <ClInclude Include="src\core\spoof\disk\mountmgr.hxx" />
+    <ClInclude Include="src\core\spoof\disk\partmgr.hxx" />
+    <ClInclude Include="src\core\spoof\disk\registry.hxx" />
+    <ClInclude Include="src\core\spoof\disk\shared.hxx" />
+    <ClInclude Include="src\core\spoof\disk\storahci.hxx" />
+    <ClInclude Include="src\core\spoof\disk\stornvme.hxx" />
+    <ClInclude Include="src\core\spoof\disk\storport.hxx" />
+    <ClInclude Include="src\core\spoof\disk\volume_serial.hxx" />
+    <ClInclude Include="src\core\spoof\helpers.hxx" />
+    <ClInclude Include="src\core\spoof\hostname.hxx" />
+    <ClInclude Include="src\core\spoof\tpm.hxx" />
+    <ClInclude Include="src\core\spoof\uuid_cache.hxx" />
+    <ClInclude Include="src\core\spoof\nic.hxx" />
+    <ClInclude Include="src\core\spoof\smbios.hxx" />
+    <ClInclude Include="src\core\spoof\efi.hxx" />
+    <ClInclude Include="src\core\spoof\boot.hxx" />
+    <ClInclude Include="src\core\spoof\arp.hxx" />
+    <ClInclude Include="src\core\spoof\monitor.hxx" />
+    <ClInclude Include="src\core\spoof\usb.hxx" />
+    <ClInclude Include="src\core\spoof\volume_guid.hxx" />
+    <ClInclude Include="src\core\spoof\product_id.hxx" />
+    <ClInclude Include="src\core\spoof\registry_ids.hxx" />
+    <ClInclude Include="src\core\spoof\usn_journal.hxx" />
+    <ClInclude Include="src\core\spoof\filetimes.hxx" />
+    <ClInclude Include="src\core\spoof\artifacts.hxx" />
+    <ClInclude Include="src\core\spoof\trace_ids.hxx" />
+    <ClInclude Include="src\core\spoof\spoof.hxx" />
+    <ClInclude Include="src\core\spoof\wmi_cimom.hxx" />
+    <ClInclude Include="src\utility\exit.hxx" />
+    <ClInclude Include="src\utility\utility.hxx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\utility\logger.hxx" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

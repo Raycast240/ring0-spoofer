@@ -1,0 +1,13 @@
+# build output & runtime caches
+build/
+
+# logs / scratch output
+*.log
+
+# Visual Studio user state
+*.vcxproj.user
+*.obj
+.vs/
+
+# Claude Code local settings
+.claude/
